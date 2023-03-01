@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SideNav from "../Components/Login/SideNavigation/SideNav";
 import CurrentBalanceCard from "../Assets/Logo/current Balance.svg";
 import Profile from "../Assets/Logo/user.svg";
@@ -8,9 +8,11 @@ import RedHome from "../Assets/Logo/home.svg";
 import BlueCar from "../Assets/Logo/blue-car.svg";
 import Category from "../Components/Category/Category";
 import Activities from "../Components/Activities/Activities";
+import { GlobalState } from "../Context/GlobalStateContext";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const { catInfo } = useContext(GlobalState);
   return (
     <div className="flex overflow-hidden">
       <SideNav open={open} setOpen={setOpen} />
@@ -40,8 +42,11 @@ const Dashboard = () => {
         <div className="w-full flex justify-end">
           <div className="flex items-center gap-5 mr-5 mt-5">
             <div>
-              <button className="bg-[#FFC248] rounded-xl px-[37px] py-[15px] text-white active:bg-[#e6b34e] hover:bg-[#fcc65a]">
-                + Add Expense
+              <button
+                disabled={catInfo === ""}
+                className="bg-[#FFC248] rounded-xl px-[37px] py-[15px] text-white disabled:active:bg-yellow-300 disabled:bg-yellow-300 active:bg-[#e6b34e] hover:bg-[#fcc65a]"
+              >
+                {catInfo === "" ? "Select A Category" : " + Add Expense"}
               </button>
             </div>
             <img className="w-[86px] h-[86px]" src={Profile} alt="" />
