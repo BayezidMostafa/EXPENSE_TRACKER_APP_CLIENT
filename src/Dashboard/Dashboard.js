@@ -16,14 +16,15 @@ import axios from "axios";
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const { catInfo } = useContext(GlobalState);
+  const { catInfo, totalExpense, setTotalExpense } = useContext(GlobalState);
+  console.log(totalExpense);
   const { user } = useContext(AuthenticationContext);
 
   const { data: userInfo = [], refetch } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:5000/userInformation/${user?.email}`
+        `https://server-side-smoky.vercel.app/userInformation/${user?.email}`
       );
       return res.data;
     },
@@ -104,6 +105,8 @@ const Dashboard = () => {
         </div>
       </div>
       <ExpenseModal
+        totalExpense={totalExpense}
+        setTotalExpense={setTotalExpense}
         userInfo={userInfo}
         refetch={refetch}
         isVisible={showModal}

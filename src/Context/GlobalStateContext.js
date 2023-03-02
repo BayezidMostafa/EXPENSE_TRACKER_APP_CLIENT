@@ -16,6 +16,8 @@ const GlobalStateContext = ({ children }) => {
     setCatInfo,
     amount,
     setAmount,
+    totalExpense,
+    setTotalExpense,
   };
 
   return <GlobalState.Provider value={info}>{children}</GlobalState.Provider>;

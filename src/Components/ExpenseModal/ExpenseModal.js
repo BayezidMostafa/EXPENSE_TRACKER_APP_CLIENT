@@ -5,7 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../Context/AuthContext";
 import { GlobalState } from "../../Context/GlobalStateContext";
 
-const ExpenseModal = ({ isVisible, onClose, refetch, userInfo }) => {
+const ExpenseModal = ({
+  isVisible,
+  onClose,
+  refetch,
+  userInfo,
+  totalExpense,
+  setTotalExpense,
+}) => {
   const { user } = useContext(AuthenticationContext);
   const { amount, setAmount, catInfo } = useContext(GlobalState);
   const Navigate = useNavigate();
@@ -34,7 +41,7 @@ const ExpenseModal = ({ isVisible, onClose, refetch, userInfo }) => {
       },
     };
     axios
-      .put("http://localhost:5000/expenseInfo", spendinfo)
+      .put("https://server-side-smoky.vercel.app/expenseInfo", spendinfo)
       .then((res) => {
         const prevBalance = userInfo.balance;
         const updatedbalance = Number(prevBalance - amount);
@@ -42,8 +49,12 @@ const ExpenseModal = ({ isVisible, onClose, refetch, userInfo }) => {
           updatedbalance,
         };
         axios
-          .put(`http://localhost:5000/upblnc/${user?.email}`, uBalance)
+          .put(
+            `https://server-side-smoky.vercel.app/upblnc/${user?.email}`,
+            uBalance
+          )
           .then((res) => {
+            setTotalExpense({ ...totalExpense, amount });
             toast.success("Successfully added");
             refetch();
             onClose();
@@ -68,6 +79,7 @@ const ExpenseModal = ({ isVisible, onClose, refetch, userInfo }) => {
         className="flex gap-2 flex-col justify-center items-center lg:min-w-[30vw] lg:min-h-[20vh] md:min-h-[20vh] md:min-w-[40vw] min-h-[20vh] min-w-[50vw] bg-white rounded-md"
       >
         <input
+          placeholder="$ Please add your expense"
           className="focus:outline-yellow-500 border-yellow-400 border-2 rounded-md py-2 px-2 w-[90%]"
           onChange={(e) => setAmount(e.target.value)}
           type="number"

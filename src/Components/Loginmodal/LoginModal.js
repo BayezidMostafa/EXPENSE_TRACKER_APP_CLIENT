@@ -22,7 +22,7 @@ const LoginModal = ({ isVisible, onClose }) => {
         balance: 50000,
       };
       axios
-        .put("http://localhost:5000/userData", userData)
+        .put("https://server-side-smoky.vercel.app/userData", userData)
         .then((res) => {
           console.log(res.data);
           onClose();
