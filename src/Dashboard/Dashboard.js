@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import SideNav from "../Components/Login/SideNavigation/SideNav";
 import CurrentBalanceCard from "../Assets/Logo/current Balance.svg";
-import Profile from "../Assets/Logo/user.svg";
 import ArrowDown from "../Assets/Logo/Arrow - Down Circle.svg";
 import Game from "../Assets/Logo/dark-g.svg";
 import RedHome from "../Assets/Logo/home.svg";
@@ -10,11 +9,13 @@ import Category from "../Components/Category/Category";
 import Activities from "../Components/Activities/Activities";
 import { GlobalState } from "../Context/GlobalStateContext";
 import ExpenseModal from "../Components/ExpenseModal/ExpenseModal";
+import { AuthenticationContext } from "../Context/AuthContext";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { catInfo } = useContext(GlobalState);
+  const { user } = useContext(AuthenticationContext);
   return (
     <div className="flex overflow-hidden">
       <SideNav open={open} setOpen={setOpen} />
@@ -52,7 +53,11 @@ const Dashboard = () => {
                 {catInfo === "" ? "Select A Category" : " + Add Expense"}
               </button>
             </div>
-            <img className="w-[86px] h-[86px]" src={Profile} alt="" />
+            <img
+              className="w-[86px] h-[86px] rounded-full"
+              src={user?.photoURL}
+              alt=""
+            />
             <img src={ArrowDown} alt="" />
           </div>
         </div>

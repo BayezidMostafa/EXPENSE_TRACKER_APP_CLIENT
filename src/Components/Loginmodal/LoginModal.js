@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useContext } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +15,22 @@ const LoginModal = ({ isVisible, onClose }) => {
   const handleGoogleLogin = () => {
     googleProviderLogin().then((data) => {
       const user = data.user;
-      console.log(user);
-      onClose();
-      Navigate("/dashboard");
+
+      const userData = {
+        name: user?.displayName,
+        email: user?.email,
+        balanace: "5000",
+      };
+      axios
+        .put("http://localhost:5000/userData", userData)
+        .then((res) => {
+          if (res.data.upsertedCount) {
+            console.log(res.data);
+            onClose();
+            Navigate("/dashboard");
+          }
+        })
+        .catch((err) => console.error(err.message));
     });
   };
 
