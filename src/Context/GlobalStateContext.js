@@ -6,14 +6,15 @@ const GlobalStateContext = ({ children }) => {
   const [count, setCount] = useState(0);
 
   const [catInfo, setCatInfo] = useState("");
-
-  console.log(catInfo);
+  const [amount, setAmount] = useState("");
 
   const info = {
     count,
     setCount,
     catInfo,
     setCatInfo,
+    amount,
+    setAmount,
   };
 
   return <GlobalState.Provider value={info}>{children}</GlobalState.Provider>;

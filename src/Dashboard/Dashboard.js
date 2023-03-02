@@ -9,9 +9,11 @@ import BlueCar from "../Assets/Logo/blue-car.svg";
 import Category from "../Components/Category/Category";
 import Activities from "../Components/Activities/Activities";
 import { GlobalState } from "../Context/GlobalStateContext";
+import ExpenseModal from "../Components/ExpenseModal/ExpenseModal";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const { catInfo } = useContext(GlobalState);
   return (
     <div className="flex overflow-hidden">
@@ -43,6 +45,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-5 mr-5 mt-5">
             <div>
               <button
+                onClick={() => setShowModal(true)}
                 disabled={catInfo === ""}
                 className="bg-[#FFC248] rounded-xl px-[37px] py-[15px] text-white disabled:active:bg-yellow-300 disabled:bg-yellow-300 active:bg-[#e6b34e] hover:bg-[#fcc65a]"
               >
@@ -83,6 +86,7 @@ const Dashboard = () => {
           <Activities />
         </div>
       </div>
+      <ExpenseModal isVisible={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
