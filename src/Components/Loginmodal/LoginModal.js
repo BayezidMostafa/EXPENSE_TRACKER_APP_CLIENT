@@ -19,16 +19,14 @@ const LoginModal = ({ isVisible, onClose }) => {
       const userData = {
         name: user?.displayName,
         email: user?.email,
-        balanace: "5000",
+        balance: 50000,
       };
       axios
         .put("http://localhost:5000/userData", userData)
         .then((res) => {
-          if (res.data.upsertedCount) {
-            console.log(res.data);
-            onClose();
-            Navigate("/dashboard");
-          }
+          console.log(res.data);
+          onClose();
+          Navigate("/dashboard");
         })
         .catch((err) => console.error(err.message));
     });

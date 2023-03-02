@@ -7,6 +7,8 @@ import AuthContext from "./Context/AuthContext";
 import GlobalStateContext from "./Context/GlobalStateContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
 
 AOS.init({
   offset: 100,
@@ -14,14 +16,19 @@ AOS.init({
   easing: "ease-out-cubic",
 });
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthContext>
-      <GlobalStateContext>
-        <App />
-      </GlobalStateContext>
-    </AuthContext>
+    <QueryClientProvider client={queryClient}>
+      <AuthContext>
+        <GlobalStateContext>
+          <Toaster position="top-right" />
+          <App />
+        </GlobalStateContext>
+      </AuthContext>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

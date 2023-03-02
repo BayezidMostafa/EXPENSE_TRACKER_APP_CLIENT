@@ -10,12 +10,24 @@ import Activities from "../Components/Activities/Activities";
 import { GlobalState } from "../Context/GlobalStateContext";
 import ExpenseModal from "../Components/ExpenseModal/ExpenseModal";
 import { AuthenticationContext } from "../Context/AuthContext";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { catInfo } = useContext(GlobalState);
   const { user } = useContext(AuthenticationContext);
+
+  const { data: userInfo = [], refetch } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `http://localhost:5000/userInformation/${user?.email}`
+      );
+      return res.data;
+    },
+  });
   return (
     <div className="flex overflow-hidden">
       <SideNav open={open} setOpen={setOpen} />
@@ -33,7 +45,7 @@ const Dashboard = () => {
             <img className="" src={CurrentBalanceCard} alt="" />
             <div className="absolute top-24 right-32">
               <p className="text-[36px] font-semibold text-[#130F26]">
-                $55,569
+                ${userInfo.balance}
               </p>
               <p>Total Expense</p>
             </div>
@@ -91,7 +103,12 @@ const Dashboard = () => {
           <Activities />
         </div>
       </div>
-      <ExpenseModal isVisible={showModal} onClose={() => setShowModal(false)} />
+      <ExpenseModal
+        userInfo={userInfo}
+        refetch={refetch}
+        isVisible={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

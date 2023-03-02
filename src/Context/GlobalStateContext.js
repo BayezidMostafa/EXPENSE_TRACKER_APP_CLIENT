@@ -7,6 +7,7 @@ const GlobalStateContext = ({ children }) => {
 
   const [catInfo, setCatInfo] = useState("");
   const [amount, setAmount] = useState("");
+  const [totalExpense, setTotalExpense] = useState("");
 
   const info = {
     count,

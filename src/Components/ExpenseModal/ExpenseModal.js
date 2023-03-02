@@ -1,23 +1,59 @@
+import axios from "axios";
 import React, { useContext } from "react";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { AuthenticationContext } from "../../Context/AuthContext";
 import { GlobalState } from "../../Context/GlobalStateContext";
 
-const ExpenseModal = ({ isVisible, onClose }) => {
+const ExpenseModal = ({ isVisible, onClose, refetch, userInfo }) => {
+  const { user } = useContext(AuthenticationContext);
   const { amount, setAmount, catInfo } = useContext(GlobalState);
-  console.log(amount);
   const Navigate = useNavigate();
   if (!isVisible) return null;
   const handleOnClose = (e) => {
     if (e.target.id === "wrapper") onClose();
   };
 
+  const today = new Date();
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let day = today.getDate();
+
+  console.log(year, month, day);
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const updateinfo = {
+    const spendinfo = {
       spend: amount,
       categoryInfo: catInfo,
+      email: user?.email,
+      date: {
+        day,
+        month,
+        year,
+      },
     };
-    console.log(updateinfo);
+    axios
+      .put("http://localhost:5000/expenseInfo", spendinfo)
+      .then((res) => {
+        const prevBalance = userInfo.balance;
+        const updatedbalance = Number(prevBalance - amount);
+        const uBalance = {
+          updatedbalance,
+        };
+        axios
+          .put(`http://localhost:5000/upblnc/${user?.email}`, uBalance)
+          .then((res) => {
+            toast.success("Successfully added");
+            refetch();
+            onClose();
+            console.log(res.data);
+          })
+          .catch((err) => console.error(err.message));
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
   };
 
   return (
